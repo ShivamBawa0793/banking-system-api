@@ -1,10 +1,12 @@
 package com.example.bankingsystem.service.impl;
 
 import com.example.bankingsystem.service.BankingSystem;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class BankingSystemImpl implements BankingSystem {
     @Override
     public boolean createAccount(int timestamp, String accountId) {
