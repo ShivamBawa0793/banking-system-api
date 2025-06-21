@@ -1,5 +1,6 @@
 package com.example.bankingsystem.service.impl;
 
+import com.example.bankingsystem.repository.AccountRepository;
 import com.example.bankingsystem.service.BankingSystem;
 import org.springframework.stereotype.Service;
 
@@ -8,9 +9,19 @@ import java.util.Optional;
 
 @Service
 public class BankingSystemImpl implements BankingSystem {
+
+    private final AccountRepository accountRepository;
+
+    public BankingSystemImpl(AccountRepository accountRepository) {
+        this.accountRepository = accountRepository;
+    }
+
     @Override
-    public boolean createAccount(int timestamp, String accountId) {
-        return false;
+    public boolean createAccount(int timeStamp, String accountId) {
+        if(accountId == null || accountId.isEmpty()){
+            return false;
+        }
+        return accountRepository.save(timeStamp, accountId);
     }
 
     @Override
