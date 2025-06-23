@@ -56,6 +56,12 @@ public class AccountRepositoryImpl implements AccountRepository {
 
     @Override
     public Optional<Integer> getBalance(String accountId) {
-        return Optional.empty();
+        String sql = "SELECT balance FROM ACCOUNTS where id = ?";
+        try {
+            Integer balance = jdbcTemplate.queryForObject(sql, Integer.class, accountId);
+            return Optional.ofNullable(balance);
+        } catch (Exception e) {
+            return Optional.empty();
+        }
     }
 }

@@ -32,7 +32,7 @@ public class BankingSystemImpl implements BankingSystem {
         Boolean balanceUpadted =  accountRepository.updateBalance(timestamp,accountId, amount);
 
         if(balanceUpadted){
-            //return accountRepository.
+            return accountRepository.getBalance(accountId);
         }
         return Optional.empty();
     }
