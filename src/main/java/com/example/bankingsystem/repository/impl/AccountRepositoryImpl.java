@@ -7,6 +7,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public class AccountRepositoryImpl implements AccountRepository {
 
@@ -36,5 +38,24 @@ public class AccountRepositoryImpl implements AccountRepository {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    @Override
+    public Boolean updateBalance(int timeStamp, String accountId, int amount) {
+        String sql = "UPDATE ACCOUNTS SET balance = balance + ?, creation_timestamp = ? where id = ?";
+        try{
+            int rowsAffected = jdbcTemplate.update(sql,
+                    amount,
+                    timeStamp,
+                    accountId);
+            return  rowsAffected >0;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @Override
+    public Optional<Integer> getBalance(String accountId) {
+        return Optional.empty();
     }
 }

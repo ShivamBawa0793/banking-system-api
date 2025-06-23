@@ -26,6 +26,14 @@ public class BankingSystemImpl implements BankingSystem {
 
     @Override
     public Optional<Integer> deposit(int timestamp, String accountId, int amount) {
+        if(accountId == null || accountId.isEmpty() || amount<=0){
+            return Optional.empty();
+        }
+        Boolean balanceUpadted =  accountRepository.updateBalance(timestamp,accountId, amount);
+
+        if(balanceUpadted){
+            //return accountRepository.
+        }
         return Optional.empty();
     }
 

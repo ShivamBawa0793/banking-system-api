@@ -1,13 +1,13 @@
 package com.example.bankingsystem.controller;
 
+import com.example.bankingsystem.dto.DepositRequest;
 import com.example.bankingsystem.service.BankingSystem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/bank")
@@ -31,5 +31,19 @@ public class BankingController {
         }
         return new ResponseEntity<>("Account:: "+accountId+" already exists or is invalid"
                 ,HttpStatus.CONFLICT);
+    }
+    @PostMapping("/deposit")
+    public ResponseEntity<?> deposit(@RequestBody DepositRequest request){
+        int timeStamp = (int) (System.currentTimeMillis()/1000);
+        Optional<Integer> balance = bankingSystem.deposit(timeStamp,
+                request.getAccountId(), request.getAmount());
+        if(balance.isPresent()){
+            return new ResponseEntity<>("Deposit successful. " +
+                    "New balanace for account id "+request.getAccountId()+ " is: "
+                    +balance, HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>("Deposit failed. " +
+                    "account not found or invalid amount", HttpStatus.BAD_REQUEST);
+        }
     }
 }
