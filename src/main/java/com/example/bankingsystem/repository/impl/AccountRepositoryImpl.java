@@ -3,6 +3,7 @@ package com.example.bankingsystem.repository.impl;
 import com.example.bankingsystem.model.Account;
 import com.example.bankingsystem.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -76,6 +77,17 @@ public class AccountRepositoryImpl implements AccountRepository {
 
             return Optional.ofNullable(rowAffected);
         } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public Optional<Account> findById(String accountId) {
+        String sql = "SELECT id, creation_timestamp, balance, total_outgoing FROM ACCOUNTS WHERE id = ?";
+        try{
+            Account account = jdbcTemplate.queryForObject(sql, accountRowMapper, accountId);
+            return Optional.ofNullable(account);
+        } catch (DataAccessException e) {
             return Optional.empty();
         }
     }

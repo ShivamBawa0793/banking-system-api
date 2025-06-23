@@ -1,6 +1,8 @@
 package com.example.bankingsystem.repository;
 
 
+import com.example.bankingsystem.model.Account;
+
 import java.util.Optional;
 
 public interface AccountRepository {
@@ -38,5 +40,12 @@ public interface AccountRepository {
      * Returns Optional.empty() otherwise under the following conditions:
      */
     Optional<Integer> transfer(int timeStamp, String sourceAccountId, String targetAccountId, int amount);
+
+    /**
+     * Finds an account by its ID.
+     * @param accountId The ID of the account.
+     * @return An Optional containing the Account if found, otherwise empty.
+     */
+    Optional<Account> findById(String accountId);
 
 }
