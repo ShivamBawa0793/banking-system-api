@@ -1,6 +1,7 @@
 package com.example.bankingsystem.controller;
 
 import com.example.bankingsystem.dto.DepositRequest;
+import com.example.bankingsystem.dto.TransferRequest;
 import com.example.bankingsystem.service.BankingSystem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,16 +34,31 @@ public class BankingController {
                 ,HttpStatus.CONFLICT);
     }
     @PostMapping("/deposit")
-    public ResponseEntity<?> deposit(@RequestBody DepositRequest request){
+    public ResponseEntity<?> deposit(@RequestBody DepositRequest depositRequest){
         int timeStamp = (int) (System.currentTimeMillis()/1000);
         Optional<Integer> balance = bankingSystem.deposit(timeStamp,
-                request.getAccountId(), request.getAmount());
+                depositRequest.getAccountId(), depositRequest.getAmount());
         if(balance.isPresent()){
             return new ResponseEntity<>("Deposit successful. " +
-                    "New balanace for account id "+request.getAccountId()+ " is: "
+                    "New balanace for account id "+depositRequest.getAccountId()+ " is: "
                     +balance, HttpStatus.OK);
         }else{
             return new ResponseEntity<>("Deposit failed. " +
+                    "account not found or invalid amount", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/transfer")
+    public ResponseEntity<?> transfer(@RequestBody TransferRequest transferRequest){
+        int timeStamp = (int) (System.currentTimeMillis()/1000);
+        Optional<Integer> newBalance = bankingSystem.transfer(timeStamp,
+                transferRequest.getSourceAccountId(), transferRequest.getTargetAccountId(),
+                transferRequest.getAmount());
+        if(newBalance.isPresent()){
+            return  new ResponseEntity<>("new balance of the source account: "+transferRequest.getSourceAccountId()+
+                    " is :: "+newBalance, HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>("Transfer failed. " +
                     "account not found or invalid amount", HttpStatus.BAD_REQUEST);
         }
     }

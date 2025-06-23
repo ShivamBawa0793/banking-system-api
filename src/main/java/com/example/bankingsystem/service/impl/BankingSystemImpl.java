@@ -39,6 +39,19 @@ public class BankingSystemImpl implements BankingSystem {
 
     @Override
     public Optional<Integer> transfer(int timestamp, String sourceAccountId, String targetAccountId, int amount) {
+        if(sourceAccountId == null || sourceAccountId.isEmpty() || amount<=0
+        || targetAccountId == null || targetAccountId.isEmpty()
+                || sourceAccountId.equalsIgnoreCase(targetAccountId) ){
+            return Optional.empty();
+        }
+        Optional<Integer> sourceAccountBalance = accountRepository.getBalance(sourceAccountId);
+        if(sourceAccountBalance.get() < amount){
+            return Optional.empty();
+        }
+        Optional<Integer> transfer = accountRepository.transfer(timestamp,sourceAccountId,targetAccountId,amount);
+        if(transfer.isPresent()){
+            return accountRepository.getBalance(sourceAccountId);
+        }
         return Optional.empty();
     }
 

@@ -64,4 +64,19 @@ public class AccountRepositoryImpl implements AccountRepository {
             return Optional.empty();
         }
     }
+
+    @Override
+    public Optional<Integer> transfer(int timeStamp, String sourceAccountId, String targetAccountId, int amount) {
+        String sql = "UPDATE ACCOUNTS SET balance = ? , creation_timestamp = ? where id = ?";
+        try{
+            int rowAffected = jdbcTemplate.update(sql,
+                    amount,
+                    timeStamp,
+                    targetAccountId);
+
+            return Optional.ofNullable(rowAffected);
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
 }

@@ -1,8 +1,6 @@
 package com.example.bankingsystem.repository;
 
 
-import com.example.bankingsystem.model.Account;
-
 import java.util.Optional;
 
 public interface AccountRepository {
@@ -28,5 +26,17 @@ public interface AccountRepository {
      * @return An Optional containing the balance if found, otherwise empty.
      */
     Optional<Integer> getBalance(String accountId);
+
+    /**
+     * Transfers a given amount of money from a source account to a target account.
+     * The description in the provided image referred to a transfer operation.
+     *
+     * @param sourceAccountId The identifier of the account from which money is transferred.
+     * @param targetAccountId The identifier of the account to which money is transferred.
+     * @param amount The amount of money to transfer. Must be greater than 0.
+     * @return An Optional containing the *new balance of the source account* if the transfer was successful.
+     * Returns Optional.empty() otherwise under the following conditions:
+     */
+    Optional<Integer> transfer(int timeStamp, String sourceAccountId, String targetAccountId, int amount);
 
 }
