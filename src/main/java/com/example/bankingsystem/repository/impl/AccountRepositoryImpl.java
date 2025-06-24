@@ -91,4 +91,19 @@ public class AccountRepositoryImpl implements AccountRepository {
             return Optional.empty();
         }
     }
+
+    @Override
+    public Boolean withdraw(int timeStamp, String accountId, int sourceBalance, int withdrawAmount) {
+        int updatedBalance = sourceBalance - withdrawAmount;
+        String sql = "UPDATE ACCOUNTS SET balance = ?, creation_timestamp = ? where id = ?";
+        try{
+            int rowsAffected = jdbcTemplate.update(sql,
+                    updatedBalance,
+                    timeStamp,
+                    accountId);
+                return rowsAffected>0;
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }

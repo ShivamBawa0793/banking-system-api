@@ -55,8 +55,9 @@ public class BankingController {
                 transferRequest.getSourceAccountId(), transferRequest.getTargetAccountId(),
                 transferRequest.getAmount());
         if(newBalance.isPresent()){
-            return  new ResponseEntity<>("new balance of the source account: "+transferRequest.getSourceAccountId()+
-                    " is :: "+newBalance, HttpStatus.OK);
+            return  new ResponseEntity<>("Transfer success , new balance of the source account: "
+                    +transferRequest.getSourceAccountId()+
+                    " is :: "+newBalance.get(), HttpStatus.OK);
         }else{
             return new ResponseEntity<>("Transfer failed. " +
                     "account not found or invalid amount", HttpStatus.BAD_REQUEST);

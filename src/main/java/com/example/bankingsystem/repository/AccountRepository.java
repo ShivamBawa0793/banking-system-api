@@ -48,4 +48,15 @@ public interface AccountRepository {
      */
     Optional<Account> findById(String accountId);
 
+    /**
+     * withdraw from the balance of an existing account.
+     *
+     * @param timeStamp      the update of timeStamp while balance update.
+     * @param accountId      The ID of the account to update.
+     * @param sourceBalance  current balance of source account.
+     * @param withdrawAmount The amount to be withdrawn.
+     * @return true if the balance was updated, false if the account was not found.
+     */
+    Boolean withdraw(int timeStamp, String accountId, int sourceBalance, int withdrawAmount);
+
 }
