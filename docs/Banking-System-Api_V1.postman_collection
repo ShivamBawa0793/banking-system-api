@@ -1,0 +1,177 @@
+{
+	"info": {
+		"_postman_id": "aac09f18-b9d4-42f8-8b16-b6da064dd75b",
+		"name": "Banking-System-Api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "46077474",
+		"_collection_link": "https://shivam-4795050.postman.co/workspace/Shivam's-Workspace~5e085537-514d-473a-8c86-650dff0f801f/collection/46077474-aac09f18-b9d4-42f8-8b16-b6da064dd75b?action=share&source=collection_link&creator=46077474"
+	},
+	"item": [
+		{
+			"name": "getAccountById",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/bank/accounts/testUser123",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"bank",
+						"accounts",
+						"testUser123"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllAccounts",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/bank/accounts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"bank",
+						"accounts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "checkBalance",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/bank/accounts/balance/testUser123",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"bank",
+						"accounts",
+						"balance",
+						"testUser123"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "1.createAccount",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/bank/accounts?accountId=testUser123",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"bank",
+						"accounts"
+					],
+					"query": [
+						{
+							"key": "accountId",
+							"value": "testUser123"
+						},
+						{
+							"key": "accountId",
+							"value": "anotherUser456",
+							"disabled": true
+						},
+						{
+							"key": "accountId",
+							"value": "testUset456",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2.amountDeposit",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"accountId\": \"testUser123\",\r\n    \"amount\": 12121\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/bank/deposit",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"bank",
+						"deposit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3.transfer",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"sourceAccountId\": \"testUser123\",\r\n    \"targetAccountId\": \"anotherUser456\",\r\n    \"amount\": 500\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/bank/transfer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"bank",
+						"transfer"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
