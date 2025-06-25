@@ -69,7 +69,7 @@ public class AccountRepositoryImpl implements AccountRepository {
 
     @Override
     public Optional<Integer> transfer(int timeStamp, String sourceAccountId, String targetAccountId, int amount) {
-        String sql = "UPDATE ACCOUNTS SET balance = ? , creation_timestamp = ? where id = ?";
+        String sql = "UPDATE ACCOUNTS SET balance = balance + ? , creation_timestamp = ? where id = ?";
         try{
             int rowAffected = jdbcTemplate.update(sql,
                     amount,
