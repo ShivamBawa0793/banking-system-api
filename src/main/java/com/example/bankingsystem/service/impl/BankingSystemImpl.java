@@ -78,4 +78,10 @@ public class BankingSystemImpl implements BankingSystem {
     public List<String> topSpenders(int timestamp, int n) {
         return List.of();
     }
+
+    @Override
+    public Optional<Account> accountById(String accountId) {
+        return accountRepository.findById(accountId);
+        //return Optional.empty();
+    }
 }

@@ -1,17 +1,17 @@
 package com.example.bankingsystem.dto.response;
 
-public class BankResponse extends ApiResponse {
+public class BankTransactionResponse extends ApiResponse {
 
     private String accountId;
     private Integer newBalance;
 
-    public BankResponse(String message, Boolean success, String accountId, Integer newBalance) {
+    public BankTransactionResponse(String message, Boolean success, String accountId, Integer newBalance) {
         super(message, success);
         this.accountId = accountId;
         this.newBalance = newBalance;
     }
 
-    public BankResponse(String errorCode, String message, Boolean success) {
+    public BankTransactionResponse(String errorCode, String message, Boolean success) {
         super(errorCode, message, success);
     }
 

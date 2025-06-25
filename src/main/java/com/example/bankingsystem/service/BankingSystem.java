@@ -1,5 +1,7 @@
 package com.example.bankingsystem.service;
 
+import com.example.bankingsystem.model.Account;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -62,4 +64,6 @@ public interface BankingSystem {
      * Returns an empty list if n is less than or equal to 0.
      */
     List<String> topSpenders(int timestamp, int n);
+
+    Optional<Account> accountById(String accountId);
 }

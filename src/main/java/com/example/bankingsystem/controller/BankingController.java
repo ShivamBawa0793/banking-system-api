@@ -2,7 +2,9 @@ package com.example.bankingsystem.controller;
 
 import com.example.bankingsystem.dto.request.DepositRequest;
 import com.example.bankingsystem.dto.request.TransferRequest;
+import com.example.bankingsystem.dto.response.AccountDetailsResponse;
 import com.example.bankingsystem.dto.response.ApiResponse;
+import com.example.bankingsystem.model.Account;
 import com.example.bankingsystem.service.BankingSystem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,25 @@ public class BankingController {
     @Autowired
     public BankingController(BankingSystem bankingSystem){
         this.bankingSystem = bankingSystem;
+    }
+
+    @GetMapping("/accounts/{accountId}")
+    public ResponseEntity<?> getAccountById(@PathVariable String accountId) {
+
+        Optional<Account> accountOpt = bankingSystem.accountById(accountId);
+        AccountDetailsResponse responseDto = null;
+        if (accountOpt.isPresent()) {
+            Account account = accountOpt.get();
+            responseDto = new AccountDetailsResponse(
+                    account.getAccountId(),
+                    account.getTimestamp(),
+                    account.getBalance(),
+                    account.getTotalOutgoing()
+            );
+            return new ResponseEntity<>(responseDto,HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(new ApiResponse("ACCOUNT_NOT_FOUND","Account not found",false),HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping("/accounts")
