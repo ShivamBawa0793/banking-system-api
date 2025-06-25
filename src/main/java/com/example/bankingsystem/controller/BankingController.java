@@ -1,7 +1,8 @@
 package com.example.bankingsystem.controller;
 
-import com.example.bankingsystem.dto.DepositRequest;
-import com.example.bankingsystem.dto.TransferRequest;
+import com.example.bankingsystem.dto.request.DepositRequest;
+import com.example.bankingsystem.dto.request.TransferRequest;
+import com.example.bankingsystem.dto.response.ApiResponse;
 import com.example.bankingsystem.service.BankingSystem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,45 +23,46 @@ public class BankingController {
     }
 
     @PostMapping("/accounts")
-    public ResponseEntity<String> createAccount(@RequestParam String accountId){
+    public ResponseEntity<ApiResponse> createAccount(@RequestParam String accountId){
         int timeStamp = (int) (System.currentTimeMillis()/1000);
         boolean created = bankingSystem.createAccount(timeStamp,accountId);
 
         if(created){
-            return new ResponseEntity<>("Account:: "+accountId+" created successfully"
-                    ,HttpStatus.CREATED);
+            return new ResponseEntity<>(new ApiResponse("Account "+accountId+ " created successfully." , true),
+                    HttpStatus.CREATED);
         }
-        return new ResponseEntity<>("Account:: "+accountId+" already exists or is invalid"
-                ,HttpStatus.CONFLICT);
+            return new ResponseEntity<>(new ApiResponse("ACCOUNT_EXISTS" ,
+                "Account " +accountId+ " already exists or invalid ID.",false),
+                HttpStatus.CONFLICT);
     }
     @PostMapping("/deposit")
-    public ResponseEntity<?> deposit(@RequestBody DepositRequest depositRequest){
+    public ResponseEntity<ApiResponse> deposit(@RequestBody DepositRequest depositRequest){
         int timeStamp = (int) (System.currentTimeMillis()/1000);
         Optional<Integer> balance = bankingSystem.deposit(timeStamp,
                 depositRequest.getAccountId(), depositRequest.getAmount());
         if(balance.isPresent()){
-            return new ResponseEntity<>("Deposit successful. " +
-                    "New balanace for account id "+depositRequest.getAccountId()+ " is: "
-                    +balance, HttpStatus.OK);
+            return new ResponseEntity<ApiResponse>(new ApiResponse("Deposit successful." +
+                    "new balance for accont id " +depositRequest.getAccountId()+ " is: "
+                    +balance.get(),true), HttpStatus.OK);
         }else{
-            return new ResponseEntity<>("Deposit failed. " +
-                    "account not found or invalid amount", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<ApiResponse>(new ApiResponse("DEPOSIT_FAILED","Deposit failed. "+
+                    "account not found or invalid amount" ,false), HttpStatus.BAD_REQUEST);
         }
     }
 
     @PostMapping("/transfer")
-    public ResponseEntity<?> transfer(@RequestBody TransferRequest transferRequest){
+    public ResponseEntity<ApiResponse> transfer(@RequestBody TransferRequest transferRequest){
         int timeStamp = (int) (System.currentTimeMillis()/1000);
         Optional<Integer> newBalance = bankingSystem.transfer(timeStamp,
                 transferRequest.getSourceAccountId(), transferRequest.getTargetAccountId(),
                 transferRequest.getAmount());
         if(newBalance.isPresent()){
-            return  new ResponseEntity<>("Transfer success , new balance of the source account: "
+            return  new ResponseEntity<ApiResponse>(new ApiResponse("Transfer success , new balance of the source account: "
                     +transferRequest.getSourceAccountId()+
-                    " is :: "+newBalance.get(), HttpStatus.OK);
+                    " is :: "+newBalance.get(),true), HttpStatus.OK);
         }else{
-            return new ResponseEntity<>("Transfer failed. " +
-                    "account not found or invalid amount", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<ApiResponse>(new ApiResponse("INVALID_AMOUNT","Transfer failed. " +
+                    "account not found or invalid amount",false), HttpStatus.BAD_REQUEST);
         }
     }
 }

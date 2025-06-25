@@ -1,4 +1,4 @@
-package com.example.bankingsystem.dto;
+package com.example.bankingsystem.dto.request;
 
 public class DepositRequest {
     private String accountId;
