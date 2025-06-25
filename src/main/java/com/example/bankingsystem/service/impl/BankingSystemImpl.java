@@ -81,7 +81,22 @@ public class BankingSystemImpl implements BankingSystem {
 
     @Override
     public Optional<Account> accountById(String accountId) {
+        if(accountId == null || accountId.isEmpty()){
+            return Optional.empty();
+        }
         return accountRepository.findById(accountId);
-        //return Optional.empty();
+    }
+
+    @Override
+    public List<Account> getAllAccounts() {
+        return accountRepository.getAllAccounts();
+    }
+
+    @Override
+    public Optional<Integer> getBalance(String accountId) {
+        if(accountId == null || accountId.isEmpty()){
+            return Optional.empty();
+        }
+        return accountRepository.getBalance(accountId);
     }
 }

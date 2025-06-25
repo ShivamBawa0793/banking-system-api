@@ -11,7 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/bank")
@@ -42,6 +44,33 @@ public class BankingController {
             return new ResponseEntity<>(new ApiResponse("ACCOUNT_NOT_FOUND","Account not found",false),HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping("/accounts")
+    public ResponseEntity<List<AccountDetailsResponse>> getAllAccount(){
+
+        List<Account> allAccounts = bankingSystem.getAllAccounts();
+        List<AccountDetailsResponse> responseList = allAccounts.stream().map(
+                account -> new AccountDetailsResponse(account.getAccountId(),
+                        account.getTimestamp(),
+                        account.getBalance(),
+                        account.getTotalOutgoing())).toList();
+        return new ResponseEntity<>(responseList,HttpStatus.OK);
+    }
+
+    @GetMapping("accounts/balance/{accountId}")
+    ResponseEntity<ApiResponse> checkBalance(@PathVariable String accountId){
+        Optional<Integer> balance = bankingSystem.getBalance(accountId);
+        if(balance.isPresent()){
+           return new ResponseEntity<>(new ApiResponse("Account ID "+accountId+ " balance is : "+balance.get(),
+                   true),
+                   HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(new ApiResponse("ACCOUNT_DOESNOT_EXISIT",
+                    "Account "+accountId+" invalid",false),
+                    HttpStatus.CONFLICT);
+        }
+    }
+
 
     @PostMapping("/accounts")
     public ResponseEntity<ApiResponse> createAccount(@RequestParam String accountId){

@@ -3,6 +3,7 @@ package com.example.bankingsystem.repository;
 
 import com.example.bankingsystem.model.Account;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface AccountRepository {
@@ -58,5 +59,7 @@ public interface AccountRepository {
      * @return true if the balance was updated, false if the account was not found.
      */
     Boolean withdraw(int timeStamp, String accountId, int sourceBalance, int withdrawAmount);
+
+    List<Account> getAllAccounts();
 
 }

@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -105,5 +106,11 @@ public class AccountRepositoryImpl implements AccountRepository {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    @Override
+    public List<Account> getAllAccounts() {
+        String sql = "SELECT id, creation_timestamp, balance, total_outgoing from ACCOUNTS";
+        return jdbcTemplate.query(sql, accountRowMapper);
     }
 }

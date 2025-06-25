@@ -66,4 +66,8 @@ public interface BankingSystem {
     List<String> topSpenders(int timestamp, int n);
 
     Optional<Account> accountById(String accountId);
+
+    List<Account> getAllAccounts();
+
+    Optional<Integer> getBalance(String accountId);
 }
