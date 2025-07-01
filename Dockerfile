@@ -57,7 +57,7 @@ WORKDIR /app
 # within the 'builder' stage, as Maven typically puts it in the 'target/' directory
 # relative to the project root.
 # It is copied to 'app.jar' in the current working directory of the runtime stage.
-COPY --from=builder /app/target/bankingsystem-1.0.0-SNAPSHOT.jar app.jar
+COPY --from=builder /app/target/bankingsystem-2.0.0-SNAPSHOT.jar app.jar
 
 # Expose the port that your Spring Boot application will listen on.
 # The default port for Spring Boot is 8080.
