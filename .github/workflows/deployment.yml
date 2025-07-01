@@ -1,0 +1,69 @@
+# .github/workflows/deploy-backend.yml
+
+name: Deploy Spring Boot Backend to EC2
+
+on:
+  push:
+    branches:
+      - develop # Trigger this workflow on pushes to the 'develop' branch
+  workflow_dispatch: {} # Allows manual triggering from the GitHub Actions UI
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest # Use the latest Ubuntu runner provided by GitHub Actions
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4 # Action to check out your repository code
+
+      - name: Set up Java JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17' # Ensure this matches your project's Java version
+          distribution: 'temurin' # Recommended distribution
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3 # Action to log in to Docker Hub
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build Maven Project
+        run: mvn clean package -DskipTests # Build your Spring Boot JAR, skipping tests
+
+      - name: Build Docker Image
+        run: |
+          # Build the Docker image using the Dockerfile in your project root
+          # The JAR is in target/ after mvn package
+          docker build -t ${{ secrets.DOCKER_IMAGE_NAME }}:latest .
+
+      - name: Push Docker Image to Docker Hub
+        run: docker push ${{ secrets.DOCKER_IMAGE_NAME }}:latest
+
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@v1.0.0 # Action to execute commands over SSH
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            # Navigate to a safe directory (e.g., user's home)
+            cd ~
+
+            # Pull the latest Docker image from Docker Hub
+            echo "Pulling latest Docker image..."
+            docker pull ${{ secrets.DOCKER_IMAGE_NAME }}:latest
+
+            # Stop the old container if it's running
+            echo "Stopping existing container (if any)..."
+            docker stop banking-app-container || true # '|| true' prevents script from failing if container doesn't exist
+
+            # Remove the old container
+            echo "Removing old container (if any)..."
+            docker rm banking-app-container || true # '|| true' prevents script from failing if container doesn't exist
+
+            # Run the new container
+            echo "Running new container..."
+            docker run -d -p 8080:8080 --name banking-app-container ${{ secrets.DOCKER_IMAGE_NAME }}:latest
+
+            echo "Deployment complete!"
